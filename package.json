@@ -1,0 +1,32 @@
+{
+  "name": "csv-upload-pipedrive",
+  "version": "1.0.0",
+  "description": "CSV file uploader with real time progress using react and NodeJS\"",
+  "main": "server.js",
+  "scripts": {
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "client": "cd client && npm start",
+    "server": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agailevictor/csv-upload-pipedrive.git"
+  },
+  "author": "Agaile Victor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agailevictor/csv-upload-pipedrive/issues"
+  },
+  "homepage": "https://github.com/agailevictor/csv-upload-pipedrive#readme",
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-pino-logger": "^4.0.0",
+    "node-env-run": "^3.0.2",
+    "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
+    "pino-colada": "^1.4.4"
+  }
+}
