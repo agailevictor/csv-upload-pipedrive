@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 class Search extends Component {
     constructor(props) {
         super(props);
+        console.log('Here');
+        console.log(props.suggestions);
         this.state = {
             activeSuggestion: 0,
             filteredSuggestions: [],
