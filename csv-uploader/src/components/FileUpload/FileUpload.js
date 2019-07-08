@@ -10,9 +10,8 @@ const FileUpload = () => {
   const [uploadedFile, setUploadedFile] = useState({});
   const [message, setMessage] = useState('');
   const [uploadPercentage, setUploadPercentage] = useState(0);
-  const [showFileUpload, setshowFileUpload] = useState(true);
-  const [showSearch, setSearch] = useState(false);
-  const [suggestions, setSuggestions] = useState();
+  const [showFileUpload, setshowFileUpload] = useState(false);
+  const [showSearch, setSearch] = useState(true);
 
   const onChange = e => {
     setFile(e.target.files[0]);
@@ -42,7 +41,6 @@ const FileUpload = () => {
             setFilename('Choose File');
             setshowFileUpload(false);
             setSearch(true);
-            setSuggestions(res.data);
           }, 2000);
         }
       });
@@ -101,7 +99,7 @@ const FileUpload = () => {
       {showSearch === true ? <div className='row mt-5'>
         <div className='col-md-6 m-auto'>
           <div className='custom-file mb-4'>
-            <Search suggestions={suggestions} />
+            <Search />
           </div>
         </div>
       </div> : null}

@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 class Search extends Component {
     constructor(props) {
         super(props);
-        console.log('Here');
-        console.log(props.suggestions);
         this.state = {
             activeSuggestion: 0,
             filteredSuggestions: [],
@@ -20,20 +19,38 @@ class Search extends Component {
 
     onChange = e => {
         // call API and return the results
-        const suggestions = ["White", "Black", "Green", "Blue", "Yellow", "Red"];
-        const userInput = e.currentTarget.value;
+        // const suggestions = ["White", "Black", "Green", "Blue", "Yellow", "Red"];
+        if (e.target.value && e.target.value !== '') {
+            var suggestions = [];
+            var url = '/api/suggestions?value=' + e.target.value;
+            axios.get(url)
+                .then(response => {
+                    console.log('data : ' + response.data.data);
+                    suggestions = response.data.data;
+                })
+                .catch(error => {
+                    console.log('error', error);
+                });
 
-        const filteredSuggestions = suggestions.filter(
-            suggestion =>
-                suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-        );
+            console.log('suggestions : ' + suggestions);
+            const userInput = e.currentTarget.value;
 
-        this.setState({
-            activeSuggestion: 0,
-            filteredSuggestions,
-            showSuggestions: true,
-            userInput: e.currentTarget.value
-        });
+            const filteredSuggestions = suggestions.filter(
+                suggestion =>
+                    suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+            );
+
+            this.setState({
+                activeSuggestion: 0,
+                filteredSuggestions,
+                showSuggestions: true,
+                userInput: e.currentTarget.value
+            });
+        } else {
+            this.setState({
+                userInput: ""
+            });
+        }
     };
 
     onClick = e => {
