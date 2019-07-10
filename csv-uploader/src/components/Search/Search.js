@@ -13,43 +13,40 @@ class Search extends Component {
         };
     }
 
-    handleInputChange = e => {
-        console.log(e.target.value);
+    handleGetSuggestions(QueryString, callback) {
+        var url = 'http://localhost:5000/api/suggestions?value=' + QueryString;
+        axios.get(url)
+            .then(response => {
+                callback(response.data.data);
+            })
+            .catch(error => {
+                console.log('error', error);
+            });
     }
 
     onChange = e => {
-        // call API and return the results
-        // const suggestions = ["White", "Black", "Green", "Blue", "Yellow", "Red"];
+        var self = this;
         if (e.target.value && e.target.value !== '') {
-            var suggestions = [];
-            var url = '/api/suggestions?value=' + e.target.value;
-            axios.get(url)
-                .then(response => {
-                    console.log('data : ' + response.data.data);
-                    suggestions = response.data.data;
-                })
-                .catch(error => {
-                    console.log('error', error);
+            var textValue = e.target.value;
+            this.handleGetSuggestions(e.target.value, function (list) {
+                const userInput = textValue;
+                const filteredSuggestions = list.filter(
+                    suggestion =>
+                        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+                );
+
+                self.setState({
+                    activeSuggestion: 0,
+                    filteredSuggestions,
+                    showSuggestions: true,
+                    userInput: textValue
                 });
-
-            console.log('suggestions : ' + suggestions);
-            const userInput = e.currentTarget.value;
-
-            const filteredSuggestions = suggestions.filter(
-                suggestion =>
-                    suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-            );
-
-            this.setState({
-                activeSuggestion: 0,
-                filteredSuggestions,
-                showSuggestions: true,
-                userInput: e.currentTarget.value
-            });
+            })
         } else {
-            this.setState({
+            self.setState({
                 userInput: ""
             });
+
         }
     };
 

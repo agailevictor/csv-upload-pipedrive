@@ -10,8 +10,8 @@ const FileUpload = () => {
   const [uploadedFile, setUploadedFile] = useState({});
   const [message, setMessage] = useState('');
   const [uploadPercentage, setUploadPercentage] = useState(0);
-  const [showFileUpload, setshowFileUpload] = useState(false);
-  const [showSearch, setSearch] = useState(true);
+  const [showFileUpload, setshowFileUpload] = useState(true);
+  const [showSearch, setSearch] = useState(false);
 
   const onChange = e => {
     setFile(e.target.files[0]);
@@ -24,7 +24,7 @@ const FileUpload = () => {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('/api/upload', formData, {
+      const res = await axios.post('http://localhost:5000/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
