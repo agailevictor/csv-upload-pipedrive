@@ -18,38 +18,45 @@ const FileUpload = () => {
     setFilename(e.target.files[0].name);
   };
 
+  const showprogress = () => {
+    for (var i = 0; i < 100; i++) {
+      setUploadPercentage(i);
+    }
+    setTimeout(showprogress, 1000);
+  }
+
   const onSubmit = async e => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        onUploadProgress: progressEvent => {
-          setUploadPercentage(
-            parseInt(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            )
-          );
-
-          // Clear percentage, uploaded file names
-          setTimeout(() => {
-            setUploadPercentage(0);
-            setFilename('Choose File');
-            setshowFileUpload(false);
-            setSearch(true);
-          }, 2000);
+      axios.post('http://localhost:5000/api/upload',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' }
         }
-      });
+      )
+        .then(function (response) {
+          if (response.status && response.status === 200) {
+            clearTimeout();
+            setMessage('File Uploaded');
+            setTimeout(() => {
+              setshowFileUpload(false);
+              setSearch(true);
+            }, 2000);
+          } else {
+            setFilename('Choose File');
+            setUploadPercentage(0);
+            setMessage('There was a problem with the server');
+          }
+        })
+        .catch(function (error) {
+          setMessage(error);
+        });
 
-      const { fileName, filePath } = res.data;
+      showprogress();
 
-      setUploadedFile({ fileName, filePath });
-
-      setMessage('File Uploaded');
     } catch (err) {
       if (err.response.status === 500) {
         setMessage('There was a problem with the server');
