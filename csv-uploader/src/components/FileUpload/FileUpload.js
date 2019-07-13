@@ -12,17 +12,35 @@ const FileUpload = () => {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [showFileUpload, setshowFileUpload] = useState(true);
   const [showSearch, setSearch] = useState(false);
-
+  const [showProgress, setProgress] = useState(true);
   const onChange = e => {
     setFile(e.target.files[0]);
     setFilename(e.target.files[0].name);
   };
 
-  const showprogress = () => {
-    for (var i = 0; i < 100; i++) {
-      setUploadPercentage(i);
+  const checkProgress = () => {
+    try {
+      axios.post('http://localhost:5000/api/status', {})
+        .then(function (response) {
+          console.log('showProgress : ', showProgress);
+          setUploadPercentage(response.data.data);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      if (showProgress) {
+        setTimeout(() => {
+          checkProgress()
+        }, 1000)
+      }
+
+    } catch (e) {
+      console.log(e);
     }
-    setTimeout(showprogress, 1000);
+  }
+
+  const showprogress = () => {
+    checkProgress();
+
   }
 
   const onSubmit = async e => {
@@ -39,8 +57,8 @@ const FileUpload = () => {
       )
         .then(function (response) {
           if (response.status && response.status === 200) {
-            clearTimeout();
             setMessage('File Uploaded');
+            setProgress(false);
             setTimeout(() => {
               setshowFileUpload(false);
               setSearch(true);
