@@ -22,14 +22,16 @@ var upload = {
                         console.log(err);
                     } else {
                         data.forEach(x => {
-                            var reqData = {
-                                id: i++,
-                                name: x[1],
-                                age: x[2],
-                                address: x[3],
-                                team: x[4],
-                                total: data.length
-                            };
+                            if (x[1] && x[2] && x[2] && x[2]) {
+                                var reqData = {
+                                    id: i++,
+                                    name: x[1],
+                                    age: x[2],
+                                    address: x[3],
+                                    team: x[4],
+                                    total: data.length
+                                };
+                            }
 
                             promise = uploadService.handleUploadData(reqData);
                             promise

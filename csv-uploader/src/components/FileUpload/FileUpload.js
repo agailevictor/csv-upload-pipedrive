@@ -12,7 +12,7 @@ const FileUpload = () => {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [showFileUpload, setshowFileUpload] = useState(true);
   const [showSearch, setSearch] = useState(false);
-  const [showProgress, setProgress] = useState(true);
+  var timeout;
   const onChange = e => {
     setFile(e.target.files[0]);
     setFilename(e.target.files[0].name);
@@ -22,17 +22,13 @@ const FileUpload = () => {
     try {
       axios.post('http://localhost:5000/api/status', {})
         .then(function (response) {
-          console.log('showProgress : ', showProgress);
           setUploadPercentage(response.data.data);
         }).catch(function (error) {
           console.log(error);
         });
-      if (showProgress) {
-        setTimeout(() => {
-          checkProgress()
-        }, 1000)
-      }
-
+      timeout = setTimeout(() => {
+        checkProgress()
+      }, 1000)
     } catch (e) {
       console.log(e);
     }
@@ -58,7 +54,8 @@ const FileUpload = () => {
         .then(function (response) {
           if (response.status && response.status === 200) {
             setMessage('File Uploaded');
-            setProgress(false);
+            setUploadPercentage(100);
+            clearTimeout(timeout);
             setTimeout(() => {
               setshowFileUpload(false);
               setSearch(true);
@@ -70,7 +67,9 @@ const FileUpload = () => {
           }
         })
         .catch(function (error) {
-          setMessage(error);
+          console.log(error);
+          setMessage('There was a problem with the server');
+          clearTimeout(timeout);
         });
 
       showprogress();

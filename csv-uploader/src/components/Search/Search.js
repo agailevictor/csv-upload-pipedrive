@@ -24,6 +24,10 @@ class Search extends Component {
             });
     }
 
+    handleSubmit = () => {
+        alert(this.state.userInput);
+    }
+
     onChange = e => {
         var self = this;
         if (e.target.value && e.target.value !== '') {
@@ -113,7 +117,7 @@ class Search extends Component {
                     />
 
                     <div className="input-group-append">
-                        <button className="btn btn-outline-secondary" type="button">Submit</button>
+                        <button className="btn btn-outline-secondary" type="button" onClick={this.handleSubmit}>Submit</button>
                     </div>
                 </div>
                 {suggestionsListComponent}
