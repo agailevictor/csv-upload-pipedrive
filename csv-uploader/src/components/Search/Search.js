@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import List from '../List/List';
 
 class Search extends Component {
     constructor(props) {
@@ -9,7 +10,8 @@ class Search extends Component {
             activeSuggestion: 0,
             filteredSuggestions: [],
             showSuggestions: false,
-            userInput: ""
+            userInput: "",
+            searchData: []
         };
     }
 
@@ -25,11 +27,22 @@ class Search extends Component {
     }
 
     handleSubmit = () => {
-        alert(this.state.userInput);
+        var reqObject = {
+            "query": this.state.userInput
+        };
+        var url = 'http://localhost:5000/api/search';
+        axios.post(url, reqObject)
+            .then(response => {
+                this.setState({ searchData: response.data.data });
+            })
+            .catch(error => {
+                console.log('error', error);
+            });
     }
 
     onChange = e => {
         var self = this;
+        self.setState({ searchData: [] });
         if (e.target.value && e.target.value !== '') {
             var textValue = e.target.value;
             this.handleGetSuggestions(e.target.value, function (list) {
@@ -121,6 +134,9 @@ class Search extends Component {
                     </div>
                 </div>
                 {suggestionsListComponent}
+                <div>
+                    <List searchData={this.state.searchData} />
+                </div>
             </Fragment>
         );
     }
