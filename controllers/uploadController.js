@@ -65,8 +65,6 @@ var upload = {
         }
     },
 
-
-
     getSuggestions(req, res) {
         var suggestionList = [];
         if (req.query.value && req.query.value !== '') {
@@ -84,12 +82,27 @@ var upload = {
             });
 
         } else {
-            res.status(400).send("Page Number Should be greater than Zero");
+            res.status(400).send("Search value cannot be empty");
         }
     },
 
     getStatus(req, res) {
         res.status(200).json({ data: uploadPer });
+    },
+
+    getSearchResults(req, res) {
+        if (req.body.query) {
+            uploadService.handleGetSeachResults(req.body.query, function (err, rows) {
+                if (err) {
+                    res.status(400).send(err);
+                }
+                else {
+                }
+                res.status(200).json({ data: rows[0] });
+            });
+        } else {
+            res.status(400).send("Search Query cannot be empty");
+        }
     }
 };
 module.exports = upload;

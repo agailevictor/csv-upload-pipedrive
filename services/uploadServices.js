@@ -26,11 +26,11 @@ var uploadService = {
         }
     },
 
-    handleGetStatus(data, callback) {
+    handleGetSeachResults(data, callback) {
         try {
-            return db.query('CALL SP_Get_Upload_Status(?)', [data], callback);
+            return db.query('CALL SP_Get_Search_Results(?)', [data], callback);
         } catch (e) {
-            console.log("Error in handleGetStatus : " + e);
+            console.log("Error in handleGetSeachResults : " + e);
         }
     }
 

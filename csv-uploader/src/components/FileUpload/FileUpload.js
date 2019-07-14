@@ -12,6 +12,7 @@ const FileUpload = () => {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [showFileUpload, setshowFileUpload] = useState(true);
   const [showSearch, setSearch] = useState(false);
+  const [disableFile, setdisableFile] = useState(false);
   var timeout;
   const onChange = e => {
     setFile(e.target.files[0]);
@@ -43,7 +44,7 @@ const FileUpload = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
-
+    setdisableFile(true);
     try {
       axios.post('http://localhost:5000/api/upload',
         formData,
@@ -52,6 +53,8 @@ const FileUpload = () => {
         }
       )
         .then(function (response) {
+          clearTimeout(timeout);
+          setdisableFile(false);
           if (response.status && response.status === 200) {
             setMessage('File Uploaded');
             setUploadPercentage(100);
@@ -69,6 +72,7 @@ const FileUpload = () => {
         .catch(function (error) {
           console.log(error);
           setMessage('There was a problem with the server');
+          setdisableFile(false);
           clearTimeout(timeout);
         });
 
@@ -95,6 +99,7 @@ const FileUpload = () => {
                 className='custom-file-input'
                 id='uploadField'
                 onChange={onChange}
+                disabled={disableFile ? 'disabled' : ''}
               />
               <label className='custom-file-label' htmlFor='uploadField'>
                 {filename}
@@ -108,6 +113,7 @@ const FileUpload = () => {
               value='Upload'
               id='uploadButton'
               className='btn btn-primary btn-block mt-4'
+              disabled={disableFile ? 'disabled' : ''}
             />
           </form>
           {uploadedFile ? (
