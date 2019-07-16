@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  csv-uploader-mysql:
+    image: csv-uploader-mysql
+    container_name: csv-uploader-mysql
+    build:
+      context: ./mysql
+    ports:
+      - ${SQL_PORT}:${SQL_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+  csv-upload-api:
+    image: csv-upload-api
+    container_name: csv-upload-api
+    build:
+      context: ./csv-uploader-api
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./csv-uploader-api/config/:/usr/app/config/
+      - ./csv-uploader-api/controllers/:/usr/app/controllers/
+      - ./csv-uploader-api/db/:/usr/app/db/
+      - ./csv-uploader-api/routes/:/usr/app/routes/
+      - ./csv-uploader-api/services/:/usr/app/services/
+  csv-uploader:
+    image: csv-uploader
+    container_name: csv-uploader
+    build:
+      context: ./csv-uploader
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+    volumes:
+      - ./csv-uploader/public/:/usr/app/public/
+      - ./csv-uploader/src/:/usr/app/src/

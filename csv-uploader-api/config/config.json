@@ -1,7 +1,7 @@
 {
-    "host": "localhost",
+    "host": "csv-uploader-mysql",
     "port": 3306,
     "user": "mysql_dev",
     "password": "dev@123",
-    "database": "user_management"
+    "database": "csv_uploader"
 }

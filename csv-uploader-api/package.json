@@ -4,9 +4,7 @@
   "description": "CSV file uploader with real time progress using react and NodeJS\"",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "client": "cd csv-uploader && npm start",
-    "server": "nodemon server"
+    "start": "nodemon server"
   },
   "repository": {
     "type": "git",
