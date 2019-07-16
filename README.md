@@ -48,7 +48,6 @@ $ docker-compose up
 ```
 $ docker ps
 ```
-- If all the docker containers are up and running, open browser and type http://localhost:3000
 - To stop and remove the containers.
 ```
 $ docker-compose down
